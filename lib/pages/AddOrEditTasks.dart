@@ -200,7 +200,7 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
                     },
                     hint: Text(
                       "Set Task Priority",
-                        style: Constants.textFormFieldHintTextStyle,
+                      style: Constants.textFormFieldHintTextStyle,
                     ),
                     items: dataProvider.priorityItems
                         .map<DropdownMenuItem<String>>((String itemValue) {
@@ -353,7 +353,14 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
             highlightColor: Colors.grey.withOpacity(0.45),
             splashColor: Colors.transparent,
             onTap: () {
-              //TODO: Complete coding for Creating New Task and save it to the Provider
+              DataProvider.of(context).addNewTask(
+                taskTitle: _textTitleFieldController.text,
+                taskCategory: _selectedCategory!,
+                taskPriority: _selectedPriority!,
+                taskDueDate:
+                    DateFormat('d/M/yyyy, EEEE').format(_selectedDueDate!),
+              );
+              Navigator.pop(context);
             },
             child: Ink(
               height: 56,

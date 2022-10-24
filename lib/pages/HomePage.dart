@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:to_do_app/pages/AddOrEditTaks.dart';
+import 'package:to_do_app/pages/AddOrEditTasks.dart';
 import 'package:to_do_app/pages/CategoryPage.dart';
 import 'package:to_do_app/pages/FinishedPage.dart';
-import 'package:to_do_app/providers/DataProvider.dart';
 import 'package:to_do_app/widgets/ToDoList.dart';
 
-List<Widget> _screens = const [
+const List<Widget> _screens = [
   ToDoList(),
   CategoryPage(),
   FinishedPage(),
 ];
-List<String> _pageTitles = const [
+const List<String> _pageTitles =  [
   "To Do App",
   "Categories",
   "Finished",
@@ -68,8 +66,6 @@ class _ToDoAppState extends State<ToDoApp> {
             backgroundColor: Colors.deepOrange,
             foregroundColor: Colors.white,
             onPressed: () {
-              ///TODO: Implement this functionality
-              // Navigator.of(context).pushNamed("AddOrEditTask");
               Navigator.push(
                 context,
                 MaterialPageRoute(

@@ -1,18 +1,20 @@
 class Task {
   String taskId;
   String title;
-  int categoryId;
-  int priority;
+  String category;
+  String priority;
   String dueDate;
+  bool isCompleted;
   String? description;
   int? repeatFrequency;
 
   Task({
     required this.taskId,
     required this.title,
-    required this.categoryId,
+    required this.category,
     required this.priority,
     required this.dueDate,
+    this.isCompleted = false,
     this.description,
     this.repeatFrequency,
   });
