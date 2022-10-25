@@ -18,4 +18,20 @@ class Task {
     this.description,
     this.repeatFrequency,
   });
+
+  Task.fromJson(Map<String, dynamic> json) : taskId = json["taskId"], title = json["title"], category = json["category"],
+  priority = json["priority"], dueDate = json["dueDate"], isCompleted = json["isCompleted"],
+  description = json["description"], repeatFrequency = json["repeatFrequency"];
+
+  Map<String, dynamic> toJson () => {
+    'taskId': taskId,
+    'title': title,
+    'category': category,
+    'priority': priority,
+    'dueDate': dueDate,
+    'isCompleted': isCompleted,
+    'description': description,
+    'repeatFrequency': repeatFrequency,
+  };
+
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Constants {
+  static const listOfTasksKey = 'LIST_OF_TASKS_KEY';
+
   static const double formItemPadding = 40;
 
   static const TextStyle dropDownSelectedItemTextStyle = TextStyle(
