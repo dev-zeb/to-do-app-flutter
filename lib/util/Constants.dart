@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class Constants {
   static const listOfTasksKey = 'LIST_OF_TASKS_KEY';
 
+  final List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
+  final List<int> priorityColors = [0xFF110000, 0xFF001100, 0xFF000011, 0xFF001111];
+
   static const double formItemPadding = 40;
 
   static const TextStyle dropDownSelectedItemTextStyle = TextStyle(
@@ -23,4 +26,8 @@ class Constants {
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
+
+  getPriorityColor(String priority) {
+    return priorityColors[priorityItems.indexOf(priority)];
+  }
 }

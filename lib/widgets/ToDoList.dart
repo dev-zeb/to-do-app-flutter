@@ -47,7 +47,6 @@ class ToDoListItem extends StatefulWidget {
 }
 
 class _ToDoListItemState extends State<ToDoListItem> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -60,14 +59,14 @@ class _ToDoListItemState extends State<ToDoListItem> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        // border: Border.all(color: Colors.black, width: 0.5),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
         boxShadow: [
           BoxShadow(
-            blurRadius: 0.25,
-            color: Colors.grey.shade300,
+            blurRadius: 0.01,
+          color:
+                DataProvider.of(context).getPriorityColor(widget.task.priority).withOpacity(0.15),
             offset: const Offset(0, 2.5),
-            spreadRadius: 0.75,
+            spreadRadius: 0.01,
           )
         ],
         color: Colors.white,
@@ -76,8 +75,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
         leading: Transform.scale(
           scale: 1.5,
           child: Checkbox(
-            side: const BorderSide(
-              color: Colors.deepOrange,
+            side: BorderSide(
+              color: Colors.black.withOpacity(0.75),
+              /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
               width: 0.75,
             ),
             shape: const CircleBorder(),
@@ -125,8 +125,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
           children: [
             Text(
               widget.task.title,
-              style: const TextStyle(
-                color: Colors.deepOrange,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.85),
+                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -136,8 +137,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
             ),
             Text(
               "Category: ${widget.task.category}",
-              style: const TextStyle(
-                color: Colors.deepOrange,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.6),
+                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -147,8 +149,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
             ),
             Text(
               widget.task.dueDate,
-              style: const TextStyle(
-                color: Colors.deepOrange,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.6),
+                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -156,6 +159,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
           ],
         ),
         trailing: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
@@ -163,10 +167,10 @@ class _ToDoListItemState extends State<ToDoListItem> {
               highlightColor: Colors.lightGreenAccent,
               splashColor: Colors.lightGreenAccent,
               onTap: () {},
-              child: const Icon(
+              child: Icon(
                 Icons.flag,
-                size: 32,
-                color: Colors.deepOrange,
+                size: 24,
+                color: DataProvider.of(context).getPriorityColor(widget.task.priority),
               ),
             ),
           ],

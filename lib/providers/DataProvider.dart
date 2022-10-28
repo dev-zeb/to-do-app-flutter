@@ -13,7 +13,10 @@ class DataProvider extends ChangeNotifier {
   List<Task> _listOfTasks = [];
   final List<String> categoryItems = ['Home', 'Office', 'Study', 'Gym', 'Other'];
   final List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
-  final List<int> priorityColors = [0xFF110000, 0xFF001100, 0xFF000011, 0xFF001111];
+  final List<Color> priorityColors = [Color(0xFFFF0000), Color(0xFF0033FF), Color(0xFF008C06), Color(
+      0xFFFFB700)];
+
+  // final List<Color> priorityColors = [Colors.red, Colors.blue.shade700, Colors.green, Colors.limeAccent];
   SharedPreferences? pref;
 
   get tasks => _listOfTasks;
@@ -72,4 +75,13 @@ class DataProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  getPriorityColor(String priority) {
+    Color color = priorityColors[priorityItems.indexOf(priority)];
+    print("color -> $color | priority -> $priority");
+    print("color.value -> ${color.value}");
+    return priorityColors[priorityItems.indexOf(priority)];
+    // return Color(priorityColors[priorityItems.indexOf(priority)]);
+  }
+
 }
