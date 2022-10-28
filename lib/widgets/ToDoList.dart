@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/models/Task.dart';
+import 'package:to_do_app/pages/AddOrEditTasks.dart';
 import 'package:to_do_app/providers/DataProvider.dart';
 
 class ToDoList extends StatefulWidget {
@@ -19,9 +20,22 @@ class _ToDoListState extends State<ToDoList> {
         return ListView.builder(
           itemCount: dataProvider.tasks.length,
           itemBuilder: (context, index) {
-            return ToDoListItem(
-              index: index,
-              task: dataProvider.tasks[index],
+            return InkWell(
+              child: ToDoListItem(
+                index: index,
+                task: dataProvider.tasks[index],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddOrEditTask(
+                      isNewTask: false,
+                      task: dataProvider.tasks[index],
+                    ),
+                  ),
+                );
+              },
             );
           },
           padding: const EdgeInsets.symmetric(
@@ -63,8 +77,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
         boxShadow: [
           BoxShadow(
             blurRadius: 0.01,
-          color:
-                DataProvider.of(context).getPriorityColor(widget.task.priority).withOpacity(0.15),
+            color: DataProvider.of(context)
+                .getPriorityColor(widget.task.priority)
+                .withOpacity(0.15),
             offset: const Offset(0, 2.5),
             spreadRadius: 0.01,
           )
@@ -77,7 +92,6 @@ class _ToDoListItemState extends State<ToDoListItem> {
           child: Checkbox(
             side: BorderSide(
               color: Colors.black.withOpacity(0.75),
-              /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
               width: 0.75,
             ),
             shape: const CircleBorder(),
@@ -127,6 +141,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
               widget.task.title,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.85),
+
                 /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -139,6 +154,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
               "Category: ${widget.task.category}",
               style: TextStyle(
                 color: Colors.black.withOpacity(0.6),
+
                 /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -151,6 +167,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
               widget.task.dueDate,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.6),
+
                 /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -170,7 +187,8 @@ class _ToDoListItemState extends State<ToDoListItem> {
               child: Icon(
                 Icons.flag,
                 size: 24,
-                color: DataProvider.of(context).getPriorityColor(widget.task.priority),
+                color: DataProvider.of(context)
+                    .getPriorityColor(widget.task.priority),
               ),
             ),
           ],

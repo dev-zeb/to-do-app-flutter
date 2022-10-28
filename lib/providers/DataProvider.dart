@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,10 +10,20 @@ import 'package:uuid/uuid.dart';
 class DataProvider extends ChangeNotifier {
   Uuid uuid = const Uuid();
   List<Task> _listOfTasks = [];
-  final List<String> categoryItems = ['Home', 'Office', 'Study', 'Gym', 'Other'];
+  final List<String> categoryItems = [
+    'Home',
+    'Office',
+    'Study',
+    'Gym',
+    'Other'
+  ];
   final List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
-  final List<Color> priorityColors = [Color(0xFFFF0000), Color(0xFF0033FF), Color(0xFF008C06), Color(
-      0xFFFFB700)];
+  final List<Color> priorityColors = [
+    Color(0xFFFF0000),
+    Color(0xFF0033FF),
+    Color(0xFF008C06),
+    Color(0xFFFFB700)
+  ];
 
   // final List<Color> priorityColors = [Colors.red, Colors.blue.shade700, Colors.green, Colors.limeAccent];
   SharedPreferences? pref;
@@ -77,11 +86,28 @@ class DataProvider extends ChangeNotifier {
   }
 
   getPriorityColor(String priority) {
-    Color color = priorityColors[priorityItems.indexOf(priority)];
-    print("color -> $color | priority -> $priority");
-    print("color.value -> ${color.value}");
-    return priorityColors[priorityItems.indexOf(priority)];
-    // return Color(priorityColors[priorityItems.indexOf(priority)]);
+    Color colorOfPriority = priorityColors[priorityItems.indexOf(priority)];
+    return colorOfPriority;
   }
 
+  bool updateTask({
+    required String? taskId,
+    required String taskTitle,
+    required String taskCategory,
+    required String taskPriority,
+    required String? taskDueDate,
+  }) {
+    for(Task task in tasks) {
+      if(task.taskId == taskId) {
+        task.title = taskTitle;
+        task.category = taskCategory;
+        task.priority = taskPriority;
+        task.dueDate = taskDueDate!;
+
+        notifyListeners();
+        return true;
+      }
+    }
+    return false;
+  }
 }

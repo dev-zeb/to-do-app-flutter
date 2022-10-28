@@ -23,8 +23,17 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
   String? _selectedPriority;
   DateTime? _selectedDueDate;
 
-  final TextEditingController _textTitleFieldController =
-      TextEditingController();
+  late final TextEditingController _textTitleFieldController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _textTitleFieldController = TextEditingController(text: widget.task?.title);
+    _selectedCategory = widget.task?.category;
+    _selectedPriority = widget.task?.priority;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,13 +270,16 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
                         borderSide: BorderSide(color: Colors.deepOrange),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintStyle: _selectedDueDate == null
-                          ? Constants.textFormFieldHintTextStyle
-                          : Constants.dropDownSelectedItemTextStyle,
-                      hintText: _selectedDueDate == null
-                          ? "Set Due Date"
-                          : DateFormat('d/M/yyyy, EEEE')
-                              .format(_selectedDueDate!),
+                      hintStyle:
+                          (_selectedDueDate == null && widget.task == null)
+                              ? Constants.textFormFieldHintTextStyle
+                              : Constants.dropDownSelectedItemTextStyle,
+                      hintText: widget.task != null
+                          ? widget.task?.dueDate
+                          : _selectedDueDate == null
+                              ? "Set Due Date"
+                              : DateFormat('d/M/yyyy, EEEE')
+                                  .format(_selectedDueDate!),
                       label: const Text("Due Date"),
                       labelStyle: Constants.textFormFieldLabelTextStyle,
                     ),
@@ -287,6 +299,7 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
                         }
                         setState(() {
                           _selectedDueDate = dateSelected;
+                          widget.task?.dueDate = DateFormat('d/M/yyyy, EEEE').format(dateSelected);
                         });
                       });
                     },
@@ -325,18 +338,18 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withOpacity(0.45),
                     width: 0.25,
                   ),
                 ),
               ),
               child: const Center(
                 child: Text(
-                  "CANCEL",
+                  "Cancel",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -353,13 +366,31 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
             highlightColor: Colors.grey.withOpacity(0.45),
             splashColor: Colors.transparent,
             onTap: () {
-              DataProvider.of(context).addNewTask(
-                taskTitle: _textTitleFieldController.text,
-                taskCategory: _selectedCategory!,
-                taskPriority: _selectedPriority!,
-                taskDueDate:
-                    DateFormat('d/M/yyyy, EEEE').format(_selectedDueDate!),
-              );
+              if (widget.task != null) {
+                bool result = DataProvider.of(context).updateTask(
+                  taskId: widget.task?.taskId,
+                  taskTitle: _textTitleFieldController.text,
+                  taskCategory: _selectedCategory!,
+                  taskPriority: _selectedPriority!,
+                  taskDueDate: widget.task?.dueDate,
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(result
+                        ? "Task successfully updated!"
+                        : "Could not update the task!"),
+                  ),
+                );
+              } else {
+                DataProvider.of(context).addNewTask(
+                  taskTitle: _textTitleFieldController.text,
+                  taskCategory: _selectedCategory!,
+                  taskPriority: _selectedPriority!,
+                  taskDueDate:
+                      DateFormat('d/M/yyyy, EEEE').format(_selectedDueDate!),
+                );
+              }
               Navigator.pop(context);
             },
             child: Ink(
@@ -372,13 +403,13 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
                   ),
                 ),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  "CREATE TASK",
-                  style: TextStyle(
+                  widget.task != null ? "Save Changes" : "Create Task",
+                  style: const TextStyle(
                     color: Colors.deepOrange,
                     fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
