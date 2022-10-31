@@ -18,12 +18,12 @@ class _ToDoListState extends State<ToDoList> {
     return Consumer<DataProvider>(
       builder: (context, dataProvider, child) {
         return ListView.builder(
-          itemCount: dataProvider.tasks.length,
+          itemCount: dataProvider.getIncompleteTasks.length,
           itemBuilder: (context, index) {
             return InkWell(
               child: ToDoListItem(
                 index: index,
-                task: dataProvider.tasks[index],
+                task: dataProvider.getIncompleteTasks[index],
               ),
               onTap: () {
                 Navigator.push(
@@ -31,7 +31,7 @@ class _ToDoListState extends State<ToDoList> {
                   MaterialPageRoute(
                     builder: (context) => AddOrEditTask(
                       isNewTask: false,
-                      task: dataProvider.tasks[index],
+                      task: dataProvider.getIncompleteTasks[index],
                     ),
                   ),
                 );
@@ -51,9 +51,8 @@ class _ToDoListState extends State<ToDoList> {
 class ToDoListItem extends StatefulWidget {
   final int index;
   final Task task;
-  bool _selectedValue = false;
 
-  ToDoListItem({Key? key, required this.index, required this.task})
+  const ToDoListItem({Key? key, required this.index, required this.task})
       : super(key: key);
 
   @override
@@ -79,7 +78,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
             blurRadius: 0.01,
             color: DataProvider.of(context)
                 .getPriorityColor(widget.task.priority)
-                .withOpacity(0.15),
+                .withOpacity(0.175),
             offset: const Offset(0, 2.5),
             spreadRadius: 0.01,
           )
@@ -91,45 +90,18 @@ class _ToDoListItemState extends State<ToDoListItem> {
           scale: 1.5,
           child: Checkbox(
             side: BorderSide(
-              color: Colors.black.withOpacity(0.75),
+              color: DataProvider.of(context)
+                  .getPriorityColor(widget.task.priority),
               width: 0.75,
             ),
             shape: const CircleBorder(),
-            value: widget._selectedValue,
+            value: widget.task.isCompleted,
             onChanged: (bool? value) {
               if (kDebugMode) {
                 print("Value -> $value");
               }
               if (value!) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SizedBox(
-                      height: 300,
-                      width: 240,
-                      child: AlertDialog(
-                        actions: [
-                          InkWell(
-                            child: const Text("Yes"),
-                            onTap: () {
-                              setState(() {
-                                widget._selectedValue = !widget._selectedValue;
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                          InkWell(
-                            child: const Text("No"),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                        title: const Text("Finish Task?"),
-                      ),
-                    );
-                  },
-                );
+                _showTaskCompletionConfirmationDialog();
               }
             },
           ),
@@ -141,10 +113,17 @@ class _ToDoListItemState extends State<ToDoListItem> {
               widget.task.title,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.85),
-
-                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
+                shadows: [
+                  Shadow(
+                    blurRadius: 0.01,
+                    color: DataProvider.of(context)
+                        .getPriorityColor(widget.task.priority)
+                        .withOpacity(0.175),
+                    offset: const Offset(0, 2.5),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -154,8 +133,6 @@ class _ToDoListItemState extends State<ToDoListItem> {
               "Category: ${widget.task.category}",
               style: TextStyle(
                 color: Colors.black.withOpacity(0.6),
-
-                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -164,11 +141,9 @@ class _ToDoListItemState extends State<ToDoListItem> {
               height: 8,
             ),
             Text(
-              widget.task.dueDate,
+              "Due on: ${widget.task.dueDate}",
               style: TextStyle(
                 color: Colors.black.withOpacity(0.6),
-
-                /// color: DataProvider.of(context).getPriorityColor(widget.task.priority),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -179,21 +154,154 @@ class _ToDoListItemState extends State<ToDoListItem> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(
-              customBorder: const CircleBorder(),
-              highlightColor: Colors.lightGreenAccent,
-              splashColor: Colors.lightGreenAccent,
-              onTap: () {},
-              child: Icon(
-                Icons.flag,
-                size: 24,
-                color: DataProvider.of(context)
-                    .getPriorityColor(widget.task.priority),
-              ),
+            Icon(
+              Icons.flag,
+              size: 24,
+              color: DataProvider.of(context)
+                  .getPriorityColor(widget.task.priority),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showTaskCompletionConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32),
+          ),
+          child: Container(
+            height: 240,
+            width: 312,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                      ),
+                      child: const Text(
+                        "Mark as Complete?",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          height: 1.6,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                      ),
+                      child: const Text(
+                        "This means you have completed this task!",
+                        style: TextStyle(
+                          color: Color(0xFF757575),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 1.7,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.black,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              Navigator.pop(context);
+                            },
+                            splashColor: Colors.blue.withOpacity(0.45),
+                            child: Ink(
+                              padding: const EdgeInsets.only(
+                                top: 20.0,
+                                bottom: 20.0,
+                              ),
+                              child: const Text(
+                                "Cancel",
+                                style: TextStyle(
+                                  color: Color(0xFF757575),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.black.withOpacity(0.35),
+                        height: 32,
+                        width: 1,
+                      ),
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              DataProvider.of(context)
+                                  .completeTaskById(widget.task.taskId);
+                            },
+                            splashColor: Colors.blue.withOpacity(0.45),
+                            child: Ink(
+                              padding: const EdgeInsets.only(
+                                top: 20.0,
+                                bottom: 20.0,
+                              ),
+                              child: const Text(
+                                "Okay",
+                                style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -9,7 +9,10 @@ import 'package:uuid/uuid.dart';
 
 class DataProvider extends ChangeNotifier {
   Uuid uuid = const Uuid();
-  List<Task> _listOfTasks = [];
+  List<Task> _listOfAllTasks = [];
+  final List<Task> _listOfIncompleteTasks = [];
+  final List<Task> _listOfCompletedTasks = [];
+
   final List<String> categoryItems = [
     'Home',
     'Office',
@@ -19,16 +22,17 @@ class DataProvider extends ChangeNotifier {
   ];
   final List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
   final List<Color> priorityColors = [
-    Color(0xFFFF0000),
-    Color(0xFF0033FF),
-    Color(0xFF008C06),
-    Color(0xFFFFB700)
+    const Color(0xFFFF0000),
+    const Color(0xFF0033FF),
+    const Color(0xFF008C06),
+    const Color(0xFFFFB700)
   ];
 
-  // final List<Color> priorityColors = [Colors.red, Colors.blue.shade700, Colors.green, Colors.limeAccent];
   SharedPreferences? pref;
 
-  get tasks => _listOfTasks;
+  get getAllTasks => _listOfAllTasks;
+
+  get getIncompleteTasks => _listOfIncompleteTasks;
 
   DataProvider() {
     _loadData();
@@ -39,16 +43,23 @@ class DataProvider extends ChangeNotifier {
     String? data = pref?.getString(Constants.listOfTasksKey);
 
     var jsonDecoded = await jsonDecode(data!);
-    _listOfTasks = jsonDecoded.map<Task>((element) {
+    _listOfAllTasks = jsonDecoded.map<Task>((element) {
       var task = Task.fromJson(element);
+      if(task.isCompleted) {
+        _listOfCompletedTasks.add(task);
+      } else {
+        _listOfIncompleteTasks.add(task);
+      }
       return task;
     }).toList();
+
+
 
     notifyListeners();
   }
 
   saveData() {
-    String tasksJson = jsonEncode(tasks);
+    String tasksJson = jsonEncode(getAllTasks);
     pref?.setString(Constants.listOfTasksKey, tasksJson);
   }
 
@@ -74,13 +85,13 @@ class DataProvider extends ChangeNotifier {
       repeatFrequency: taskRepetition,
     );
 
-    _listOfTasks.add(newTask);
+    _listOfAllTasks.add(newTask);
     saveData();
     notifyListeners();
   }
 
   void removeTask(int position) {
-    _listOfTasks.removeAt(position);
+    _listOfAllTasks.removeAt(position);
 
     notifyListeners();
   }
@@ -97,7 +108,7 @@ class DataProvider extends ChangeNotifier {
     required String taskPriority,
     required String? taskDueDate,
   }) {
-    for(Task task in tasks) {
+    for(Task task in getAllTasks) {
       if(task.taskId == taskId) {
         task.title = taskTitle;
         task.category = taskCategory;
@@ -109,5 +120,20 @@ class DataProvider extends ChangeNotifier {
       }
     }
     return false;
+  }
+
+  void completeTaskById(String taskId) {
+    for (int i = 0; i < _listOfIncompleteTasks.length; i++) {
+      if(_listOfIncompleteTasks[i].taskId == taskId){
+        _listOfIncompleteTasks[i].isCompleted = true;
+        _listOfAllTasks[i].isCompleted = true;
+
+        _listOfCompletedTasks.add(_listOfIncompleteTasks[i]);
+
+        _listOfIncompleteTasks.removeAt(i);
+        break;
+      }
+    }
+    notifyListeners();
   }
 }
