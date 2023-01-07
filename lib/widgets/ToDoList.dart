@@ -121,7 +121,7 @@ class _ToDoListItemState extends State<ToDoListItem> {
                     color: DataProvider.of(context)
                         .getPriorityColor(widget.task.priority)
                         .withOpacity(0.175),
-                    offset: const Offset(0, 2.5),
+                    offset: const Offset(0, 1.0),
                   ),
                 ],
               ),

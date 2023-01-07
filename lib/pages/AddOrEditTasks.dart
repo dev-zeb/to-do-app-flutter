@@ -369,10 +369,10 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
               if (widget.task != null) {
                 bool result = DataProvider.of(context).updateTask(
                   taskId: widget.task?.taskId,
-                  taskTitle: _textTitleFieldController.text,
-                  taskCategory: _selectedCategory!,
-                  taskPriority: _selectedPriority!,
-                  taskDueDate: widget.task?.dueDate,
+                  newTaskTitle: _textTitleFieldController.text,
+                  newTaskCategory: _selectedCategory!,
+                  newTaskPriority: _selectedPriority!,
+                  newTaskDueDate: widget.task?.dueDate,
                 );
 
                 ScaffoldMessenger.of(context).showSnackBar(

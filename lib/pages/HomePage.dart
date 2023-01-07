@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:to_do_app/pages/AddOrEditTasks.dart';
-import 'package:to_do_app/pages/CategoryPage.dart';
-import 'package:to_do_app/pages/FinishedPage.dart';
+import 'package:to_do_app/pages/StatsPage.dart';
+import 'package:to_do_app/pages/SettingsPage.dart';
 import 'package:to_do_app/widgets/ToDoList.dart';
 
 const List<Widget> _screens = [
   ToDoList(),
-  CategoryPage(),
-  FinishedPage(),
+  StatsPage(),
+  SettingsPage(),
 ];
 const List<String> _pageTitles =  [
   "To Do App",
-  "Categories",
-  "Finished",
+  "Stats",
+  "Settings",
 ];
+
+const homePageIndex = 0;
+const statsPageIndex = 1;
+const settingsPageIndex = 2;
 
 class ToDoApp extends StatefulWidget {
   const ToDoApp({Key? key}) : super(key: key);
@@ -30,7 +34,7 @@ class _ToDoAppState extends State<ToDoApp> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(_selectedIndex == 0) {
+        if(_selectedIndex == homePageIndex) {
           showDialog(context: context, builder: (context) {
             return SizedBox(
               height: 300,
@@ -56,7 +60,7 @@ class _ToDoAppState extends State<ToDoApp> {
           });
         } else {
           setState(() {
-            _selectedIndex = 0;
+            _selectedIndex = homePageIndex;
           });
         }
         return false;
@@ -79,12 +83,12 @@ class _ToDoAppState extends State<ToDoApp> {
                   label: "Home",
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.list),
-                  label: "Categories",
+                  icon: Icon(Icons.query_stats),
+                  label: "Stats",
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.archive),
-                  label: "Progress",
+                  icon: Icon(Icons.settings),
+                  label: "Settings",
                 ),
               ],
               onTap: (index) {
@@ -96,7 +100,7 @@ class _ToDoAppState extends State<ToDoApp> {
               },
               selectedItemColor: Colors.deepOrange,
             ),
-            floatingActionButton: FloatingActionButton(
+            floatingActionButton: _selectedIndex == homePageIndex ? FloatingActionButton(
               backgroundColor: Colors.deepOrange,
               foregroundColor: Colors.white,
               onPressed: () {
@@ -113,7 +117,7 @@ class _ToDoAppState extends State<ToDoApp> {
                 Icons.add,
                 size: 48,
               ),
-            ),
+            ) : null,
             drawer: Drawer(
               backgroundColor: Colors.white,
               child: Column(
