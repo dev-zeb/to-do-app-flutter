@@ -27,7 +27,6 @@ class _AddOrEditTaskState extends State<AddOrEditTask> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _textTitleFieldController = TextEditingController(text: widget.task?.title);

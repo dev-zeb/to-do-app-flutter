@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class Constants {
   static const listOfTasksKey = 'LIST_OF_TASKS_KEY';
 
-  final List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
-  final List<int> priorityColors = [0xFF110000, 0xFF001100, 0xFF000011, 0xFF001111];
+  static const List<String> priorityItems = ['Urgent', 'High', 'Medium', 'Low'];
+  static List<Color> priorityColors = [
+    const Color(0xFFFF0000),
+    const Color(0xFF0033FF),
+    const Color(0xFF008C06),
+    const Color(0xFFFFB700),
+  ];
 
   static const double formItemPadding = 40;
 
@@ -27,7 +32,7 @@ class Constants {
     fontWeight: FontWeight.w400,
   );
 
-  getPriorityColor(String priority) {
+  static Color getPriorityColor(String priority) {
     return priorityColors[priorityItems.indexOf(priority)];
   }
 }

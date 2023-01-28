@@ -43,18 +43,20 @@ class DataProvider extends ChangeNotifier {
     pref ??= await SharedPreferences.getInstance();
     String? data = pref?.getString(Constants.listOfTasksKey);
 
-    var jsonDecoded = await jsonDecode(data!);
-    _listOfAllTasks = jsonDecoded.map<Task>((element) {
-      var task = Task.fromJson(element);
-      if (task.isCompleted) {
-        _listOfCompletedTasks.add(task);
-      } else {
-        _listOfIncompleteTasks.add(task);
-      }
-      return task;
-    }).toList();
+    if(data != null) {
+      var jsonDecoded = await jsonDecode(data);
+      _listOfAllTasks = jsonDecoded.map<Task>((element) {
+        var task = Task.fromJson(element);
+        if (task.isCompleted) {
+          _listOfCompletedTasks.add(task);
+        } else {
+          _listOfIncompleteTasks.add(task);
+        }
+        return task;
+      }).toList();
 
-    notifyListeners();
+      notifyListeners();
+    }
   }
 
   saveData() {

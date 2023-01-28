@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:to_do_app/pages/AddOrEditTasks.dart';
 import 'package:to_do_app/pages/StatsPage.dart';
 import 'package:to_do_app/pages/SettingsPage.dart';
-import 'package:to_do_app/widgets/ToDoList.dart';
+import 'package:to_do_app/widgets/DrawerItemWithSwitchWidget.dart';
+import 'package:to_do_app/widgets/ToDoListWidget.dart';
 
 const List<Widget> _screens = [
-  ToDoList(),
+  ToDoListWidget(),
   StatsPage(),
   SettingsPage(),
 ];
@@ -121,10 +122,18 @@ class _ToDoAppState extends State<ToDoApp> {
             drawer: Drawer(
               backgroundColor: Colors.white,
               child: Column(
-                children: const [
-                  Text("To Do App"),
-                  Text("Profile"),
-                  Text("Settings"),
+                children:  [
+                  const SizedBox(height: 24,),
+                  Image.asset("assets/images/to_do_app_logo.png", height: 132, width: 132),
+                  const Text("To Do App", style: TextStyle(fontSize: 20),),
+                  const SizedBox(height: 24,),
+                  const Divider(height: 5, color: Colors.orange,),
+                  DrawerItemWithSwitchWidget(optionName: "Dark Theme", isSelected: false,),
+                  const Divider(height: 5, color: Colors.orange,),
+                  DrawerItemWithSwitchWidget(optionName: "App Sound", isSelected: false,),
+                  const Divider(height: 5, color: Colors.orange,),
+                  DrawerItemWithSwitchWidget(optionName: "Notification", isSelected: false,),
+                  const Divider(height: 5, color: Colors.orange,),
                 ],
               ),
             ),
