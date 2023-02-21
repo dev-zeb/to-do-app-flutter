@@ -16,10 +16,10 @@ void main() {
 
   runApp(
     ChangeNotifierProvider(
+      create: (_) => DataProvider(),
       child: const MaterialApp(
         home: ToDoApp(),
       ),
-      create: (_) => DataProvider(),
     ),
   );
 }

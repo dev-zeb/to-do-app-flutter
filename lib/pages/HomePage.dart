@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:to_do_app/pages/AddOrEditTasks.dart';
 import 'package:to_do_app/pages/StatsPage.dart';
 import 'package:to_do_app/pages/SettingsPage.dart';
 import 'package:to_do_app/widgets/DrawerItemWithSwitchWidget.dart';
+import 'package:to_do_app/widgets/ExitAppDialog.dart';
 import 'package:to_do_app/widgets/ToDoListWidget.dart';
 
 const List<Widget> _screens = [
@@ -11,7 +12,7 @@ const List<Widget> _screens = [
   StatsPage(),
   SettingsPage(),
 ];
-const List<String> _pageTitles =  [
+const List<String> _pageTitles = [
   "To Do App",
   "Stats",
   "Settings",
@@ -35,30 +36,13 @@ class _ToDoAppState extends State<ToDoApp> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(_selectedIndex == homePageIndex) {
-          showDialog(context: context, builder: (context) {
-            return SizedBox(
-              height: 300,
-              width: 240,
-              child: AlertDialog(
-                actions: [
-                  InkWell(
-                    child: const Text("Yes"),
-                    onTap: () {
-                      SystemNavigator.pop();
-                    },
-                  ),
-                  InkWell(
-                    child: const Text("No"),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-                title: const Text("Exit App?"),
-              ),
-            );
-          });
+        if (_selectedIndex == homePageIndex) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const ExitAppDialog();
+            },
+          );
         } else {
           setState(() {
             _selectedIndex = homePageIndex;
@@ -101,39 +85,70 @@ class _ToDoAppState extends State<ToDoApp> {
               },
               selectedItemColor: Colors.deepOrange,
             ),
-            floatingActionButton: _selectedIndex == homePageIndex ? FloatingActionButton(
-              backgroundColor: Colors.deepOrange,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const AddOrEditTask(isNewTask: true, task: null),
-                  ),
-                );
-                // context.read<DataProvider>().addNewTask();
-              },
-              child: const Icon(
-                Icons.add,
-                size: 48,
-              ),
-            ) : null,
+            floatingActionButton: _selectedIndex == homePageIndex
+                ? FloatingActionButton(
+                    backgroundColor: Colors.deepOrange,
+                    foregroundColor: Colors.white,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AddOrEditTask(isNewTask: true, task: null),
+                        ),
+                      );
+                      // context.read<DataProvider>().addNewTask();
+                    },
+                    child: const Icon(
+                      Icons.add,
+                      size: 48,
+                    ),
+                  )
+                : null,
             drawer: Drawer(
               backgroundColor: Colors.white,
               child: Column(
-                children:  [
-                  const SizedBox(height: 24,),
-                  Image.asset("assets/images/to_do_app_logo.png", height: 132, width: 132),
-                  const Text("To Do App", style: TextStyle(fontSize: 20),),
-                  const SizedBox(height: 24,),
-                  const Divider(height: 5, color: Colors.orange,),
-                  DrawerItemWithSwitchWidget(optionName: "Dark Theme", isSelected: false,),
-                  const Divider(height: 5, color: Colors.orange,),
-                  DrawerItemWithSwitchWidget(optionName: "App Sound", isSelected: false,),
-                  const Divider(height: 5, color: Colors.orange,),
-                  DrawerItemWithSwitchWidget(optionName: "Notification", isSelected: false,),
-                  const Divider(height: 5, color: Colors.orange,),
+                children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Image.asset("assets/images/to_do_app_logo.png",
+                      height: 132, width: 132),
+                  const Text(
+                    "To Do App",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Divider(
+                    height: 5,
+                    color: Colors.orange,
+                  ),
+                  DrawerItemWithSwitchWidget(
+                    optionName: "Dark Theme",
+                    isSelected: false,
+                  ),
+                  const Divider(
+                    height: 5,
+                    color: Colors.orange,
+                  ),
+                  DrawerItemWithSwitchWidget(
+                    optionName: "App Sound",
+                    isSelected: false,
+                  ),
+                  const Divider(
+                    height: 5,
+                    color: Colors.orange,
+                  ),
+                  DrawerItemWithSwitchWidget(
+                    optionName: "Notification",
+                    isSelected: false,
+                  ),
+                  const Divider(
+                    height: 5,
+                    color: Colors.orange,
+                  ),
                 ],
               ),
             ),
