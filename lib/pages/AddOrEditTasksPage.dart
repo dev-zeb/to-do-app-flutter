@@ -5,18 +5,18 @@ import 'package:to_do_app/providers/DataProvider.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do_app/util/Constants.dart';
 
-class AddOrEditTask extends StatefulWidget {
+class AddOrEditTasksPage extends StatefulWidget {
   final bool isNewTask;
   final Task? task;
 
-  const AddOrEditTask({Key? key, required this.isNewTask, required this.task})
+  const AddOrEditTasksPage({Key? key, required this.isNewTask, required this.task})
       : super(key: key);
 
   @override
-  State<AddOrEditTask> createState() => _AddOrEditTaskState();
+  State<AddOrEditTasksPage> createState() => _AddOrEditTasksPageState();
 }
 
-class _AddOrEditTaskState extends State<AddOrEditTask> {
+class _AddOrEditTasksPageState extends State<AddOrEditTasksPage> {
   double _screenWidth = 0.0;
   bool? _isLandscape;
   String? _selectedCategory;

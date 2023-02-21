@@ -6,6 +6,7 @@ class ExitAppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Change design according to the ConfirmDialog or even consider using the same widget for every case
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       content: const Text("This will close the app."),

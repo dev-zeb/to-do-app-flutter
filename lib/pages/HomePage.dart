@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:to_do_app/pages/AddOrEditTasks.dart';
+import 'package:to_do_app/pages/AddOrEditTasksPage.dart';
 import 'package:to_do_app/pages/StatsPage.dart';
 import 'package:to_do_app/pages/SettingsPage.dart';
 import 'package:to_do_app/widgets/DrawerItemWithSwitchWidget.dart';
@@ -94,7 +94,7 @@ class _ToDoAppState extends State<ToDoApp> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const AddOrEditTask(isNewTask: true, task: null),
+                              const AddOrEditTasksPage(isNewTask: true, task: null),
                         ),
                       );
                       // context.read<DataProvider>().addNewTask();
