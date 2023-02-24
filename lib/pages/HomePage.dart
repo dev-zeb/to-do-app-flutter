@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:to_do_app/pages/AddOrEditTasksPage.dart';
 import 'package:to_do_app/pages/StatsPage.dart';
 import 'package:to_do_app/pages/SettingsPage.dart';
+import 'package:to_do_app/widgets/ConfirmationDialog.dart';
 import 'package:to_do_app/widgets/DrawerItemWithSwitchWidget.dart';
-import 'package:to_do_app/widgets/ExitAppDialog.dart';
-import 'package:to_do_app/widgets/ToDoListWidget.dart';
+import 'package:to_do_app/pages/ToDoListPage.dart';
 
 const List<Widget> _screens = [
-  ToDoListWidget(),
+  ToDoListPage(),
   StatsPage(),
   SettingsPage(),
 ];
@@ -40,7 +40,19 @@ class _ToDoAppState extends State<ToDoApp> {
           showDialog(
             context: context,
             builder: (context) {
-              return const ExitAppDialog();
+              return ConfirmationDialog(
+                dialogTitle: "Close the app?",
+                dialogDescription:
+                "This will close the app.",
+                yesButtonText: "Close",
+                yesButtonFunction: () {
+                  SystemNavigator.pop();
+                },
+                noButtonText: "No",
+                noButtonFunction: () {
+                  Navigator.pop(context);
+                },
+              );
             },
           );
         } else {
@@ -97,7 +109,6 @@ class _ToDoAppState extends State<ToDoApp> {
                               const AddOrEditTasksPage(isNewTask: true, task: null),
                         ),
                       );
-                      // context.read<DataProvider>().addNewTask();
                     },
                     child: const Icon(
                       Icons.add,
