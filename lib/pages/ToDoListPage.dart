@@ -18,7 +18,11 @@ class _ToDoListPageState extends State<ToDoListPage> {
         return ListView.builder(
           itemCount: dataProvider.getIncompleteTasks.length,
           itemBuilder: (context, index) {
-            return ToDoListItemWidget(dataProvider: dataProvider, index: index, task: dataProvider.getIncompleteTasks[index]);
+            return ToDoListItemWidget(
+              dataProvider: dataProvider,
+              index: index,
+              task: dataProvider.getIncompleteTasks[index],
+            );
           },
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
@@ -29,4 +33,3 @@ class _ToDoListPageState extends State<ToDoListPage> {
     );
   }
 }
-

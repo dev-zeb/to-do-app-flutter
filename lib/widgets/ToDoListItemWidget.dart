@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_app/models/Task.dart';
 import 'package:to_do_app/pages/AddOrEditTasksPage.dart';
@@ -11,12 +10,12 @@ class ToDoListItemWidget extends StatelessWidget {
   final int index;
   final Task task;
 
-  const ToDoListItemWidget(
-      {Key? key,
-      required this.dataProvider,
-      required this.index,
-      required this.task})
-      : super(key: key);
+  const ToDoListItemWidget({
+    Key? key,
+    required this.dataProvider,
+    required this.index,
+    required this.task,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

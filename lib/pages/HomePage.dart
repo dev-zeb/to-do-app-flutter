@@ -42,8 +42,7 @@ class _ToDoAppState extends State<ToDoApp> {
             builder: (context) {
               return ConfirmationDialog(
                 dialogTitle: "Close the app?",
-                dialogDescription:
-                "This will close the app.",
+                dialogDescription: "This will close the app.",
                 yesButtonText: "Close",
                 yesButtonFunction: () {
                   SystemNavigator.pop();
@@ -105,8 +104,10 @@ class _ToDoAppState extends State<ToDoApp> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AddOrEditTasksPage(isNewTask: true, task: null),
+                          builder: (context) => const AddOrEditTasksPage(
+                            isNewTask: true,
+                            task: null,
+                          ),
                         ),
                       );
                     },
@@ -123,8 +124,11 @@ class _ToDoAppState extends State<ToDoApp> {
                   const SizedBox(
                     height: 24,
                   ),
-                  Image.asset("assets/images/to_do_app_logo.png",
-                      height: 132, width: 132),
+                  Image.asset(
+                    "assets/images/to_do_app_logo.png",
+                    height: 132,
+                    width: 132,
+                  ),
                   const Text(
                     "To Do App",
                     style: TextStyle(fontSize: 20),
